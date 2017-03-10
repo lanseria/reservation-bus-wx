@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  <button id="btn1" style="width:100%;height:500px;font-size:100px;color:white;background:green;">图像接口的使用</button>
+  <button id="btn2" style="width:100%;height:500px;font-size:100px;color:white;background:green;">扫一扫</button>
+</body>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+ wx.config({
+  debug: false,
+  appId: '{$data["appId"]}',
+  timestamp: {$data["timestamp"]},
+  nonceStr: '{$data["nonceStr"]}',
+  signature: '{$data["signature"]}',
+  jsApiList: [
+  'checkJsApi','chooseImage','scanQRCode',
+  ]
+});
+ var btn1 = document.getElementById("btn1");
+ var btn2 = document.getElementById("btn2");
+ btn1.onclick = function(){
+  wx.chooseImage({
+    count: 1, // 默认9
+    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+    success: function (res) {
+      var localIds = res.localIds;
+      document.write("<img src="+localIds+">");
+    }
+  });
+}
+btn2.onclick = function(){
+  wx.scanQRCode({
+    needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+    scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+    success: function (res) {
+    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+  }
+});
+}
+wx.ready(function () {
+  wx.checkJsApi({
+    jsApiList: ['chooseImage'],
+    success: function(res) {
+
+    }
+  });
+});
+</script>
+</html>
